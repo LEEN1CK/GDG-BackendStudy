@@ -1,0 +1,46 @@
+package com.example.MyShop.product;
+
+import com.example.MyShop.product.dto.ProductCreateRequest;
+import com.example.MyShop.product.dto.ProductUpdateRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/products")
+public class ProductController {
+
+    private final ProductService productService;
+
+    @PostMapping
+    public ResponseEntity<Void> createProduct(@RequestBody ProductCreateRequest request) {
+        Long productId = productService.createProduct(request);
+        return ResponseEntity.created(URI.create("/products/" + productId)).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.getProductById(productId));
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<Void> updateProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest request) {
+        productService.updateProduct(productId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
+    }
+}
