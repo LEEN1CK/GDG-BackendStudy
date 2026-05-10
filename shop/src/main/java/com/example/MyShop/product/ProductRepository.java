@@ -1,34 +1,12 @@
-package com.example.MyShop.product;
+package com.example.MyShop.product.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
+import com.example.MyShop.product.entity.Product;
 
 import java.util.List;
 
-@Repository
-public class ProductRepository {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    public void save(Product product) {
-        em.persist(product);
-    }
-
-    public Product findById(Long id) {
-        return em.find(Product.class, id);
-    }
-
-    public List<Product> findAll() {
-        return em.createQuery("SELECT p FROM Product p", Product.class)
-                .getResultList();
-    }
-
-    public void deleteById(Long id) {
-        Product product = em.find(Product.class, id);
-        if (product != null) {
-            em.remove(product);
-        }
-    }
+public interface ProductRepository {
+    Product findById(Long id);
+    List<Product> findAll();
+    void save(Product product);
+    void deleteById(Long id);
 }
